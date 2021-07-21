@@ -3,6 +3,12 @@
     <h3>
       Card #{{cid}}
     </h3>
+    <div v-if="loading">
+      <h3>Loading Card...</h3>
+    </div>
+    <div v-else>
+      Card Contents
+    </div>
   </div>
 </template>
 
@@ -10,16 +16,24 @@
 export default {
   data() {
     return {
-      cid: 1
+      cid: 0,
+      loading: false
     }
   },
   watch: {
-    '$route'() {
-      this.cid = this.$route.params.cid;
+    '$route': {
+      handler: 'fetchData',
+      immediate: true
     }
   },
-  created() {
-    this.cid = this.$route.params.cid;
+  methods: {
+    fetchData() {
+      this.loading = true;
+      setTimeout(() => {
+        this.cid = this.$route.params.cid;
+        this.loading = false;
+      }, 600);
+    }
   }
 }
 </script>
